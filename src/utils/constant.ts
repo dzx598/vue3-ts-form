@@ -1,4 +1,4 @@
-import { IFormType } from "@/components/basic-form";
+//import { IFormType } from "@/components/basic-form";
 // 字典查询
 const catalogIdMap = {
   "110": "标本类型",
@@ -10,7 +10,7 @@ const catalogIdMap = {
 
 export interface IFormItemTypeMapValue {
   name: String;
-  type: IFormType;
+  type: any;
   value: any;
   options?: any[];
   radios?: any[];

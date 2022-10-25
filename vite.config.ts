@@ -4,11 +4,20 @@ import AutoImport from "unplugin-auto-import/vite";
 import Components from "unplugin-vue-components/vite";
 import { NaiveUiResolver } from "unplugin-vue-components/resolvers";
 import { ElementPlusResolver } from "unplugin-vue-components/resolvers";
+import compresssionBuild from "rollup-plugin-compression";
 import { createStyleImportPlugin } from "vite-plugin-style-import";
+import type { ICompressionOptions } from "rollup-plugin-compression";
+import dayjs from "dayjs";
 import path from "path";
 // 如果编辑器提示 path 模块找不到，则可以安装一下 @types/node -> npm i @types/node -D
 import { resolve } from "path";
 // https://vitejs.dev/config/
+const time = dayjs().format("YYYY-MM-DD HH:mm:ss");
+const option: ICompressionOptions = {
+  sourceName: `dist`,
+  type: "zip",
+  targetName: `dist-${time}.zip`,
+};
 export default defineConfig({
   plugins: [
     vue(),
@@ -16,12 +25,7 @@ export default defineConfig({
       imports: [
         "vue",
         {
-          "naive-ui": [
-            "useDialog",
-            "useMessage",
-            "useNotification",
-            "useLoadingBar",
-          ],
+          "naive-ui": ["useDialog", "useMessage", "useNotification", "useLoadingBar"],
         },
       ],
       resolvers: [ElementPlusResolver()],
@@ -29,16 +33,15 @@ export default defineConfig({
     Components({
       resolvers: [NaiveUiResolver(), ElementPlusResolver()],
     }),
+    compresssionBuild,
     createStyleImportPlugin({
       libs: [
         {
           libraryName: "cnhis-design-vue",
           esModule: true,
           ensureStyleFile: true,
-          resolveStyle: (name) => {
-            return `cnhis-design-vue/es/components/${name.slice(
-              2
-            )}/style/index.css`;
+          resolveStyle: name => {
+            return `cnhis-design-vue/es/components/${name.slice(2)}/style/index.css`;
           },
         },
       ],
@@ -75,6 +78,7 @@ export default defineConfig({
         drop_debugger: true,
       },
     },
+    reportCompressedSize: false,
     rollupOptions: {
       // ..otherOptions
       output: {
