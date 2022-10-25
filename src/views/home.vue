@@ -6,7 +6,7 @@
       <div class="reservoir-content">
         <div class="content">
           <n-grid id="reservoir">
-            <n-gi v-for="item in reservoir" @click="contentClick(item)" :key="item.label" :span="24">
+            <n-gi v-for="item in reservoir" @click="contentClick(item)" :key="item.label" :draggable="true" :span="item.width">
               <div class="content-p">
                 <span :style="item.onFocus?{color:'blue'}:''"> {{item.label}}</span>
               </div>
@@ -29,7 +29,7 @@
         <div class="content">
           <n-grid id="layoutArea">
 
-            <n-gi v-for="item in layoutData" :key="item.label" :span="item.width">
+            <n-gi v-for="(item,index) in layoutData" :key="index" :span="item.width">
               <div class="content-p" @click="contentClick(item)" v-if="!item.children && !item.visable">
                 <span :style="item.onFocus?{color:'blue'}:''"> {{item.label}}</span>
               </div>
@@ -66,11 +66,14 @@
 </template>
 <script setup lang="ts">
 import { computed, onMounted, reactive, ref, watch, nextTick } from "vue";
-import { useCountStore } from "@/store";
+
 import { storeToRefs } from "pinia";
 import Sortable from "sortablejs";
 import { FormInst } from 'naive-ui'
+import { globalStore,useCountStore,useHomeStore } from "@/store";
 const countStore = useCountStore();
+const store = globalStore()
+const home = useHomeStore();
 // 通过计算属性
 const countComputed = computed(() => countStore.count);
 // 通过 storeToRefs api 结构
@@ -151,7 +154,7 @@ const widthOptions = [{
   value: 6,
 }]
 const contentClick = (content: content) => {
-  console.log(content);
+  console.log(content,'************');
   formValue.value = content
   layoutData.value.forEach(item => {
     if (item.label == content.label) {
@@ -163,6 +166,9 @@ const contentClick = (content: content) => {
 }
 onMounted(() => {
   const dom1 = document.getElementsByClassName('n-grid')[0] as any
+  console.log(store.$state);
+  
+  
   const sortable1 = Sortable.create(dom1, {
     ghostClass: "sortable-ghost", //拖拽样式})
     animation: 150,
@@ -185,8 +191,9 @@ onMounted(() => {
     animation: 150,
     group: 'shared',
     onEnd: ({ newIndex, oldIndex, from, to }) => {
-      // console.log(newIndex, '<--newIndex', oldIndex, '-<--oldIndex---222-');
+      console.log(newIndex, '<--newIndex', oldIndex, '-<--oldIndex---222-');
       // console.dir(from.id, to.id);
+    
       let tableData = layoutData.value
       if (from.id == to.id) {
         let currRow = tableData.splice((oldIndex as number), 1)[0];

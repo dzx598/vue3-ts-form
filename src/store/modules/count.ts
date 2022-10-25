@@ -8,7 +8,7 @@ export const useCountStore = defineStore("count", () => {
   const countAdd = () => {
     return count.value++;
   };
-
+  
   return {
     count,
     doubleCount,
