@@ -1,16 +1,18 @@
 <template>
   <div>
     <n-form ref="formRef" :label-width="80" :model="curryConfig" :rules="rules">
-      <n-form-item label="名称" path="label">
+      <n-form-item label="类型" path="label">
         <n-input v-model:value="curryConfig.label" placeholder="输入名称" />
       </n-form-item>
-      <n-form-item label="宽度" path="width">
-        <n-select v-model:value="curryConfig.width" :options="widthOptions" />
+      <n-form-item label="宽度" path="itemSpan">
+        <n-select v-model:value="curryConfig.itemSpan" :options="widthOptions" />
       </n-form-item>
-      <n-form-item label="字段名" path="title">
+      <n-form-item label="标题" path="title">
         <n-input v-model:value="curryConfig.title" placeholder="输入字段名" />
       </n-form-item>
-
+      <n-form-item label="字段取值" path="field">
+        <n-input v-model:value="curryConfig.field" placeholder="输入字段取值" />
+      </n-form-item>
       <template v-if="curryConfig.type == 'select'">
         <n-form-item label="选项值" path="options">
           <n-input v-model:value="curryConfig.options" placeholder="输入options字段" />
@@ -22,8 +24,8 @@
           <template #unchecked :value="0">非必填</template>
         </n-switch>
       </n-form-item>
-      <n-form-item label="是否禁用" path="disabled">
-        <n-switch v-model:value="curryConfig.disabled">
+      <n-form-item label="是否禁用" path="disable">
+        <n-switch v-model:value="curryConfig.disable">
           <template #checked :value="true">是</template>
           <template #unchecked :value="false">否</template>
         </n-switch>
@@ -32,19 +34,33 @@
   </div>
 </template>
 <script setup lang="ts">
-import { ref, watch } from "vue";
+import { ref, watch, computed } from "vue";
 import { content } from "../index";
+import { IFormItem } from "@/components/basic-form/types";
 const props = defineProps({
   curryConfig: {
     type: Object,
     required: true,
   },
+  allForm: {
+    type: Array<IFormItem>,
+    default: () => [],
+  },
 });
-const emits = defineEmits(["update:curryConfig"]);
-const formValue = ref<content>({
-  label: "",
-  width: "",
-  fileId: "",
+const emits = defineEmits(["update:curryConfig", "formRuleChange"]);
+const formRule = computed(() => {
+  const obj = {} as any;
+  props.allForm.forEach((item: IFormItem) => {
+    if (item.require) {
+      obj[item.field] = {
+        required: true,
+        message: "请输入",
+        trigger: ["blur", "change"],
+        type: "string",
+      };
+    }
+  });
+  return obj;
 });
 const rules = {
   label: {
@@ -52,7 +68,7 @@ const rules = {
     message: "请输入标题",
     trigger: "blur",
   },
-  width: {
+  itemSpan: {
     required: true,
     message: "请输入宽度",
     type: "number",
@@ -90,7 +106,11 @@ const requireOptions = [
 watch(
   () => props.curryConfig,
   newVal => {
-    console.log(newVal, "newVal**");
+    console.log(newVal, "配置区改变**");
+    emits("formRuleChange", formRule.value);
+  },
+  {
+    deep: true,
   }
 );
 </script>

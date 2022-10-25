@@ -1,8 +1,9 @@
 export interface content {
   label: string;
-  fileId: string;
+  field: string;
   onFocus?: boolean;
-  width?: any;
+  itemSpan?: any;
+
   type?: string;
   visable?: boolean;
   children?: content[];
