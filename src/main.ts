@@ -5,6 +5,10 @@ import router from "./router/index";
 import store from "./store/index";
 import "vxe-table/lib/style.min.css";
 import "cnhis-design-vue/es/components/index.css";
+import _ from 'lodash'
 import VXETable from "vxe-table";
+const app =  createApp(App)
 
-createApp(App).use(router).use(store).use(VXETable).mount("#app");
+
+app.config.globalProperties.foo = 'bar'
+app.use(router).use(store).use(VXETable).mount("#app");

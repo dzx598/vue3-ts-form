@@ -1,17 +1,24 @@
 <script setup lang="ts">
-// This starter template is using Vue 3 <script setup> SFCs
-// Check out https://vuejs.org/api/sfc-script-setup.html#script-setup
-
+import { darkTheme, zhCN, dateZhCN } from "naive-ui";
+import { useHomeStore } from "@/store/index";
+import { NConfigProvider, GlobalThemeOverrides } from "naive-ui";
+const homeStore = useHomeStore();
+const themeOverrides: GlobalThemeOverrides = {
+  common: {
+    primaryColor: "#8a2be2",
+  },
+  Button: {
+    textColor: "#8a2be2",
+  },
+};
 </script>
 
 <template>
-  <n-message-provider>
+  <n-config-provider :locale="zhCN" :date-locale="dateZhCN" :theme-overrides="themeOverrides">
     <app-provider>
-      <router-view  />
+      <router-view />
     </app-provider>
-   
-  </n-message-provider>
-
+  </n-config-provider>
 </template>
 
 <style scoped></style>
