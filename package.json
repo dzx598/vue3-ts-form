@@ -9,6 +9,9 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@vitejs/plugin-vue-jsx": "^2.1.0",
+    "@vue/babel-helper-vue-jsx-merge-props": "^1.4.0",
+    "@vue/babel-preset-jsx": "^1.4.0",
     "axios": "^1.1.2",
     "cnhis-design-vue": "^3.1.22",
     "consola": "^2.15.3",

@@ -11,6 +11,7 @@ declare module '@vue/runtime-core' {
     AppProvider: typeof import('./src/components/app-provider/src/AppProvider.vue')['default']
     BasicForm: typeof import('./src/components/basic-form/src/BasicForm.vue')['default']
     HelloWorld: typeof import('./src/components/HelloWorld.vue')['default']
+    NButtom: typeof import('naive-ui')['NButtom']
     NButton: typeof import('naive-ui')['NButton']
     NCard: typeof import('naive-ui')['NCard']
     NCheckbox: typeof import('naive-ui')['NCheckbox']

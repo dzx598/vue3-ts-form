@@ -7,6 +7,7 @@ import { ElementPlusResolver } from "unplugin-vue-components/resolvers";
 import compresssionBuild from "rollup-plugin-compression";
 import { createStyleImportPlugin } from "vite-plugin-style-import";
 import type { ICompressionOptions } from "rollup-plugin-compression";
+import vueJsx from "@vitejs/plugin-vue-jsx";
 import dayjs from "dayjs";
 import path from "path";
 // 如果编辑器提示 path 模块找不到，则可以安装一下 @types/node -> npm i @types/node -D
@@ -21,6 +22,7 @@ const option: ICompressionOptions = {
 export default defineConfig({
   plugins: [
     vue(),
+
     AutoImport({
       imports: [
         "vue",
@@ -33,6 +35,7 @@ export default defineConfig({
     Components({
       resolvers: [NaiveUiResolver(), ElementPlusResolver()],
     }),
+    vueJsx(),
     compresssionBuild,
     createStyleImportPlugin({
       libs: [
